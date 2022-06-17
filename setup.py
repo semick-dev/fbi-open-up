@@ -16,8 +16,8 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "openup=openup:main",
-            "fbi=fbi:main",
+            "openup=fbi.openup:main",
+            "fbi=fbi.fbi:main",
         ]
     },
     classifiers=[
