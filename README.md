@@ -8,7 +8,7 @@ This little python project is quite simple, but should meet MOST of your debuggi
 
 _Agent process_
 ```yml
-- yml: |
+- bash: |
     <set python version and install>
     fbi "<connection string>"
   displayName: "Run the agent"
@@ -28,6 +28,7 @@ Select your shell
 
 1
 <cwd on agent>/> ls
+...
 ```
 
 
