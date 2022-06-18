@@ -1,8 +1,13 @@
 import argparse
+import os
 import pdb
+import time
+
+from azure.storage.queue import QueueClient
+
+from ..config import QUEUE_NAME, DEFAULT_CONNECTION_STRING
 from ..FbiQueueItem import FbiQueueItem
 from ..queue_interactions import get_control_messages
-
 
 def main():
     parser = argparse.ArgumentParser(
@@ -16,3 +21,15 @@ def main():
         help="The blob storage connection string. If not provided, will fall back to FBI_CONNECTION_STRING.",
     )
     args = parser.parse_args()
+
+    cs = args.cs
+    if not args.cs:
+        if not DEFAULT_CONNECTION_STRING:
+            raise "Need a valid connection string to run"
+        cs = DEFAULT_CONNECTION_STRING
+    
+    control_client = QueueClient.from_connection_string(cs, QUEUE_NAME + "control")
+    output_client = QueueClient.from_connection_string(cs, QUEUE_NAME + "output")
+
+    while True:
+        time.sleep(1)
