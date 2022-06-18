@@ -1,25 +1,52 @@
-from . import QueueItem
-from azure.storage.queue import QueueClient
+from ctypes import ArgumentError
+from .FbiQueueItem import FbiQueueItem
+from azure.storage.queue import QueueClient, QueueMessage
 import os
 import pdb
+from typing import List
 
-def get_control_message(cs: str, queue_name: str) -> QueueItem:
-    queue_client = QueueClient.from_connection_string(cs, queue_name)
+# todo, convert to doccomennted KWARGS
+def send_message(message: FbiQueueItem, client: QueueClient = None, cs: str = "", queue_name: str = "") -> None:
+    if client is None and cs == "" and queue_name == "":
+        raise ArgumentError(
+            "One must provide a fully populated queue_name/connection string pair, OR provide a valid QueueClient"
+        )
 
-    messages = queue_client.peek_messages()
+    if client is None:
+        client = QueueClient.from_connection_string(cs, queue_name)
 
-    for peeked_message in messages:
-        print("Peeked message: " + peeked_message.content)
-    pdb.set_trace()
-    pass
+    try:
+        result = client.send_message(content=message.asJson())
+    except BaseException as e:
+        raise
 
-def get_output_message(cs: str, queue_name: str) -> QueueItem:
-    queue_client = QueueClient.from_connection_string(cs, queue_name)
-    
-    messages = queue_client.peek_messages()
 
-    for peeked_message in messages:
-        print("Peeked message: " + peeked_message.content)
-    
-    
-    
+def filter_msg_list(messages: List[QueueMessage], type: str) -> List[FbiQueueItem]:
+    items = [FbiQueueItem.load_from_json_string(msg.content) for msg in messages]
+    return [msg for msg in items if msg.type == type]
+
+
+def get_control_messages(client: QueueClient = None, cs: str = "", queue_name: str = "") -> FbiQueueItem:
+    if client is None and cs == "" and queue_name == "":
+        raise ArgumentError(
+            "One must provide a fully populated queue_name/connection string pair, OR provide a valid QueueClient"
+        )
+
+    if client is None:
+        client = QueueClient.from_connection_string(cs, queue_name)
+
+    messages = client.peek_messages()
+    return filter_msg_list(messages, "control")
+
+
+def get_output_messages(client: QueueClient = None, cs: str = "", queue_name: str = "") -> FbiQueueItem:
+    if client is None and cs == "" and queue_name == "":
+        raise ArgumentError(
+            "One must provide a fully populated queue_name/connection string pair, OR provide a valid QueueClient"
+        )
+
+    if client is None:
+        client = QueueClient.from_connection_string(cs, queue_name)
+
+    messages = client.peek_messages()
+    return filter_msg_list(messages, "output")
