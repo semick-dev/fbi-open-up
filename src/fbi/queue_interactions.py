@@ -26,6 +26,22 @@ def filter_msg_list(messages: List[QueueMessage], type: str) -> List[FbiQueueIte
     return [msg for msg in items if msg.type == type]
 
 
+def get_message(client: QueueClient = None, cs: str = "", queue_name: str = "") -> FbiQueueItem:
+    if client is None and cs == "" and queue_name == "":
+        raise ArgumentError(
+            "One must provide a fully populated queue_name/connection string pair, OR provide a valid QueueClient"
+        )
+
+    if client is None:
+        client = QueueClient.from_connection_string(cs, queue_name)
+
+    msg = client.receive_message()
+    client.delete_message(msg)
+
+    return FbiQueueItem.load_from_json_string(msg.content)
+    
+
+
 def get_control_messages(client: QueueClient = None, cs: str = "", queue_name: str = "") -> FbiQueueItem:
     if client is None and cs == "" and queue_name == "":
         raise ArgumentError(
@@ -39,7 +55,7 @@ def get_control_messages(client: QueueClient = None, cs: str = "", queue_name: s
     return filter_msg_list(messages, "control")
 
 
-def get_output_messages(client: QueueClient = None, cs: str = "", queue_name: str = "") -> FbiQueueItem:
+def get_output_message(client: QueueClient = None, cs: str = "", queue_name: str = "") -> FbiQueueItem:
     if client is None and cs == "" and queue_name == "":
         raise ArgumentError(
             "One must provide a fully populated queue_name/connection string pair, OR provide a valid QueueClient"

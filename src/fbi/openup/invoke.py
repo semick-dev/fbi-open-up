@@ -6,7 +6,7 @@ import time
 from azure.storage.queue import QueueClient
 
 from ..FbiQueueItem import FbiQueueItem
-from ..queue_interactions import get_output_messages
+from ..queue_interactions import get_control_messages
 from ..config import QUEUE_NAME, DEFAULT_CONNECTION_STRING
 
 def main():
@@ -28,14 +28,24 @@ def main():
             raise "Need a valid connection string to run"
         cs = DEFAULT_CONNECTION_STRING
     
-    client = QueueClient.from_connection_string(cs, QUEUE_NAME)
+    control_client = QueueClient.from_connection_string(cs, QUEUE_NAME + "control")
+    output_client = QueueClient.from_connection_string(cs, QUEUE_NAME + "output")
 
     try:
-        client.delete_queue()
+        control_client.delete_queue()
+        output_client.delete_queue()
     except:
         pass
 
-    client.create_queue
-
+    control_client.create_queue()
+    output_client.create_queue()
+    
     while True:
+        control_message = get_control_messages()
+
+        if control_message:
+            pass
+        else:
+            pass
+
         time.sleep(1)

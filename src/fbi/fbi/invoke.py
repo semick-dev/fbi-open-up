@@ -9,6 +9,13 @@ from ..config import QUEUE_NAME, DEFAULT_CONNECTION_STRING
 from ..FbiQueueItem import FbiQueueItem
 from ..queue_interactions import get_control_messages
 
+# takes an input control command, generates an output message
+def run_command(control_message: FbiQueueItem) -> FbiQueueItem:
+    output_msg = FbiQueueItem(content="", type="output", shell=control_message.shell)
+
+    # process the input command string, gemerate output using sweet pinvoke
+    return output_msg
+
 def main():
     parser = argparse.ArgumentParser(
         description="This CLI app is used on a devops or actions agent to respond to debugging messages."
