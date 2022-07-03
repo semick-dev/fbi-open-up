@@ -14,8 +14,8 @@ class FbiClient:
             raise ArgumentError("One must provide a fully populated queue_name/connection string pair.")
 
         self.base_queue_name: str = base_queue_name
-        self.control_queue_name: str = "{}_control".format(base_queue_name)
-        self.output_queue_name: str = "{}_output".format(base_queue_name)
+        self.control_queue_name: str = "{}-control".format(base_queue_name)
+        self.output_queue_name: str = "{}-output".format(base_queue_name)
 
         self.control_client: QueueClient = QueueClient.from_connection_string(
             connection_string, self.control_queue_name

@@ -33,6 +33,8 @@ class LocalInvocationClient:
     def run(self, control_message: FbiQueueItem) -> FbiQueueItem:
         output_msg = FbiQueueItem(content="", type="output", shell=control_message.shell, cwd=self.cwd)
 
+        run(cwd=self.cwd)
+
         # process the input command string, generate output using sweet pinvoke
         output_msg.content = output_msg.encode_content("hello there good sir")
 
