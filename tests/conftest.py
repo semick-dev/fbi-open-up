@@ -5,7 +5,6 @@ import pdb
 from azure.storage.queue import QueueClient
 
 from dotenv import load_dotenv
-
 from fbi import FbiClient
 
 load_dotenv()

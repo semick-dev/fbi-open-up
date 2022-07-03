@@ -9,7 +9,7 @@ setup(
     version="0.1.0",
     package_dir={"": "src"},
     packages=find_packages(where="src", exclude=["tests"]),
-    install_requires=["setuptools>=45.0", "requests", "azure-storage-queue>=12.3.0"],
+    install_requires=["setuptools>=45.0", "requests", "azure-storage-queue>=12.3.0", "colorama"],
     entry_points={
         "console_scripts": [
             "openup=fbi.openup:main",
