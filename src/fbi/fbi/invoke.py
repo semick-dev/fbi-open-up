@@ -6,7 +6,7 @@ import subprocess
 
 from azure.storage.queue import QueueClient
 
-from .LocalInvocationClient import LocalInvocationClient
+from ..LocalInvocationClient import LocalInvocationClient
 
 from ..config import QUEUE_NAME, DEFAULT_CONNECTION_STRING
 from ..FbiQueueItem import FbiQueueItem
@@ -54,6 +54,9 @@ def main():
     print("Connected to {}.".format())
 
     while True:
+        if args.verbose:
+            print("Iteration {}".format(iteration))
+
         control_msg = client.get_control_message()
 
         if control_msg is not None:

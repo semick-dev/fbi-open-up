@@ -23,8 +23,8 @@ class FbiQueueItem:
 
         return cls(content=doc["content"], type=doc["type"], shell=doc["shell"], cwd=cwd)
 
-    def getDecodedContent(self):
-        b64_encoded_bytes = self.content.encode("utf-8")
+    def decode_content(self, input_str: str):
+        b64_encoded_bytes = input_str.encode("utf-8")
         original_bytes = base64.b64decode(b64_encoded_bytes)
         original_string = original_bytes.decode("utf-8")
         return original_string

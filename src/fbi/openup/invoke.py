@@ -4,6 +4,7 @@ import pdb
 import time
 
 from ..FbiClient import FbiClient
+from ..LocalInvocationClient import LocalInvocationClient
 from ..config import QUEUE_NAME, DEFAULT_CONNECTION_STRING
 
 
@@ -29,15 +30,20 @@ def main():
     iteration = 0
 
     client = FbiClient(cs, QUEUE_NAME)
+    invocation_client = LocalInvocationClient()
 
     print("Connected to {}.".format())
 
     while True:
+        if args.verbose:
+            print("Iteration {}".format(iteration))
+
         output_msg = client.get_output_message()
 
         if output_msg is not None:
             if args.verbose:
                 print(output_msg)
+            
+            invocation_client.output(output_msg)
 
         iteration += 1
-        time.sleep(1)
