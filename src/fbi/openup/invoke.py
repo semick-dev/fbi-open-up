@@ -3,11 +3,9 @@ import os
 import pdb
 import time
 
-from azure.storage.queue import QueueClient
-
-from ..FbiQueueItem import FbiQueueItem
-from ..queue_interactions import get_control_messages
+from ..FbiClient import FbiClient
 from ..config import QUEUE_NAME, DEFAULT_CONNECTION_STRING
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -27,25 +25,19 @@ def main():
         if not DEFAULT_CONNECTION_STRING:
             raise "Need a valid connection string to run"
         cs = DEFAULT_CONNECTION_STRING
-    
-    control_client = QueueClient.from_connection_string(cs, QUEUE_NAME + "control")
-    output_client = QueueClient.from_connection_string(cs, QUEUE_NAME + "output")
 
-    try:
-        control_client.delete_queue()
-        output_client.delete_queue()
-    except:
-        pass
+    iteration = 0
 
-    control_client.create_queue()
-    output_client.create_queue()
-    
+    client = FbiClient(cs, QUEUE_NAME)
+
+    print("Connected to {}.".format())
+
     while True:
-        control_message = get_control_messages()
+        output_msg = client.get_output_message()
 
-        if control_message:
-            pass
-        else:
-            pass
+        if output_msg is not None:
+            if args.verbose:
+                print(output_msg)
 
+        iteration += 1
         time.sleep(1)

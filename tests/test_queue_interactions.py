@@ -3,9 +3,7 @@ import uuid
 import base64
 import pdb
 
-from azure.storage.queue import QueueClient
-from fbi.queue_interactions import send_message, get_control_messages, get_output_messages
-from fbi import FbiQueueItem
+from fbi import FbiClient, FbiQueueItem
 
 
 def create_random_b64_content() -> str:
@@ -19,16 +17,16 @@ def create_random_b64_content() -> str:
 
 
 @pytest.mark.live_only
-def test_send_receive_control_messages(unique_queue_client: QueueClient):
-    item = FbiQueueItem(content=create_random_b64_content(), type="control", shell="pwsh")
-    send_message(client=unique_queue_client, message=item)
-    results = get_control_messages(unique_queue_client)
+def test_send_receive_control_messages(unique_queue_client: FbiClient):
+    item = FbiQueueItem(content=create_random_b64_content(), type="control", shell="default")
+    unique_queue_client.send_control_message(message=item)
+    results = unique_queue_client.peek_control_messages()
     assert len(results) >= 1
 
 
 @pytest.mark.live_only
-def test_send_receive_output_messages(unique_queue_client: QueueClient):
-    item = FbiQueueItem(content=create_random_b64_content(), type="output", shell="pwsh")
-    send_message(client=unique_queue_client, message=item)
-    results = get_output_messages(unique_queue_client)
+def test_send_receive_output_messages(unique_queue_client: FbiClient):
+    item = FbiQueueItem(content=create_random_b64_content(), type="output", shell="default")
+    unique_queue_client.send_output_message(message=item)
+    results = unique_queue_client.peek_output_messages(unique_queue_client)
     assert len(results) >= 1
