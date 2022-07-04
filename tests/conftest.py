@@ -5,23 +5,31 @@ import pdb
 from azure.storage.queue import QueueClient
 
 from dotenv import load_dotenv
-from fbi import FbiClient
+from fbi import FbiClient, LocalInvocationClient
 
 load_dotenv()
 
 COMMON_QUEUE_NAME = "test"
+root_dir = os.path.abspath(os.path.join(os.path.abspath(__file__), "..", ".."))
+live_only = pytest.mark.skipif("not config.getoption('live_only')")
+
 
 def pytest_addoption(parser):
-    parser.addoption('--live_only', action='store_true', dest="live_only",
-                 default=False, help="Enable Live Tests")
+    parser.addoption("--live_only", action="store_true", dest="live_only", default=False, help="Enable Live Tests")
 
-live_only = pytest.mark.skipif("not config.getoption('live_only')")
 
 def get_queue_client(queue_name: str) -> FbiClient:
     cs = os.getenv("TEST_ACCOUNT_CONNECTION_STRING")
     client = FbiClient(cs, base_queue_name=queue_name)
 
     client.create_queues()
+
+    return client
+
+
+@pytest.fixture
+def local_client() -> LocalInvocationClient:
+    client = LocalInvocationClient(root_dir)
 
     return client
 

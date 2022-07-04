@@ -43,7 +43,7 @@ def main():
         if output_msg is not None:
             if args.verbose:
                 print(output_msg)
-            
+
             invocation_client.output(output_msg)
 
         iteration += 1
