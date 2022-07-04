@@ -3,7 +3,7 @@ import base64
 
 
 class FbiQueueItem:
-    def __init__(self, content: str, type: str, shell: str, cwd: str = None) -> None:
+    def __init__(self, content: str, type: str = None, shell: str = None, cwd: str = None) -> None:
         # b64 encoded raw shell output from agent
         self.content = content
         # type of message. "control" or "output"

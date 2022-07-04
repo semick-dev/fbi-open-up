@@ -1,6 +1,7 @@
-from enum import auto
 import os
 import pdb
+import platform
+
 from ctypes import ArgumentError
 from typing import List
 from azure.storage.queue import QueueClient, QueueMessage
@@ -78,7 +79,7 @@ class FbiClient:
 
         if include_output:
             try:
-                self.output_client.delete_queue
+                self.output_client.delete_queue()
             except Exception as e:
                 # todo: specific logic here
                 pass
