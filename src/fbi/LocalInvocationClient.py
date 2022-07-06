@@ -27,16 +27,16 @@ class LocalInvocationClient:
             self.cwd = "/"
 
     def wait_for_input(self, output_message: FbiQueueItem) -> FbiQueueItem:
+        content = input("[remote connection] {}> ".format(output_message.cwd))
 
-        # given an output message that has context,
-        pass
+        return FbiQueueItem(content, cwd=self.cwd)
 
     # prints an output message
     def output(self, output_message: FbiQueueItem, wait=True) -> FbiQueueItem:
         self.cwd = output_message.cwd
 
         # todo dump the output
-        print(self.output)
+        print(output_message.content)
 
         if wait:
             return self.wait_for_input(output_message)
@@ -92,7 +92,7 @@ class LocalInvocationClient:
                         stderr=subprocess.STDOUT,
                     )
                 content = self.prepare_message_content(temp_file)
-                output_msg.content = output_msg.encode_content(content)
+                output_msg.content = content
 
             # change directory
             elif command is None:
@@ -100,7 +100,7 @@ class LocalInvocationClient:
             else:
                 print("No idea how we got here.")
         except Exception as e:
-            output_msg.content = output_msg.encode_content(str(e))
+            output_msg.content = str(e)
         finally:
             self.cleanup_temp_file(temp_file)
 

@@ -4,14 +4,22 @@ import base64
 
 class FbiQueueItem:
     def __init__(self, content: str, type: str = None, shell: str = None, cwd: str = None) -> None:
-        # b64 encoded raw shell output from agent
-        self.content = content
+        # content is encoded for easy upload / json-ing later
+        self._content = self.encode_content(content)
         # type of message. "control" or "output"
         self.type = type
         # what shell was the command invoked on?
         self.shell = shell
         # only populated in output message, what is the current working directory?
         self.cwd = cwd
+
+    @property
+    def content(self) -> str:
+        return self.decode_content(self._content)
+
+    @content.setter
+    def content(self, setting: str) -> None:
+        self._content = self.encode_content(setting)
 
     @classmethod
     def load_from_json_string(cls, json_content: str):
@@ -27,7 +35,7 @@ class FbiQueueItem:
         b64_encoded_bytes = input_str.encode("utf-8")
         original_bytes = base64.b64decode(b64_encoded_bytes)
         original_string = original_bytes.decode("utf-8")
-        return original_string
+        return original_string.encode("latin-1", "backslashreplace").decode("unicode-escape")
 
     def encode_content(self, input_str: str):
         input_str_bytes = input_str.encode("utf-8")

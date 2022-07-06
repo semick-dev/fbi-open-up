@@ -1,6 +1,7 @@
 import pytest
 import os
 import uuid
+import platform
 import pdb
 from azure.storage.queue import QueueClient
 
@@ -12,6 +13,7 @@ load_dotenv()
 COMMON_QUEUE_NAME = "test"
 root_dir = os.path.abspath(os.path.join(os.path.abspath(__file__), "..", ".."))
 live_only = pytest.mark.skipif("not config.getoption('live_only')")
+windows_only = pytest.mark.skipif(platform.system().lower() != "windows", reason="Only runs on windows.")
 
 
 def pytest_addoption(parser):

@@ -12,15 +12,6 @@ from ..config import QUEUE_NAME, DEFAULT_CONNECTION_STRING
 from ..FbiQueueItem import FbiQueueItem
 from ..FbiClient import FbiClient
 
-# takes an input control command, generates an output message
-def run_command(control_message: FbiQueueItem) -> FbiQueueItem:
-    output_msg = FbiQueueItem(content="", type="output", shell=control_message.shell)
-
-    # process the input command string, gemerate output using sweet pinvoke
-    output_msg.content = output_msg.encode_content("hello there good sir")
-
-    return output_msg
-
 
 def main():
     parser = argparse.ArgumentParser(

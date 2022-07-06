@@ -43,6 +43,10 @@ def main():
         if output_msg is not None:
             if args.verbose:
                 print(output_msg)
-            invocation_client.output(output_msg)
+            control_msg = invocation_client.output(output_msg)
 
+            if control_msg is not None:
+                client.send_control_message(control_msg)
+
+        time.sleep(1)
         iteration += 1

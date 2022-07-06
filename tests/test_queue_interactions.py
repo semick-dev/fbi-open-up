@@ -7,6 +7,7 @@ from fbi import FbiClient, FbiQueueItem
 
 from conftest import live_only
 
+
 def create_random_b64_content() -> str:
     content = str(uuid.uuid4()) + str(uuid.uuid4()) + str(uuid.uuid4())
 
