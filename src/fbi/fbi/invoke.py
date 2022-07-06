@@ -3,13 +3,15 @@ import os
 import pdb
 import time
 import subprocess
+import platform
 
 from azure.storage.queue import QueueClient
 
+from fbi.FbiQueueItem import FbiQueueItem
+
 from ..LocalInvocationClient import LocalInvocationClient
 
-from ..config import QUEUE_NAME, DEFAULT_CONNECTION_STRING
-from ..FbiQueueItem import FbiQueueItem
+from ..config import QUEUE_NAME, DEFAULT_CONNECTION_STRING, MAX_ITERATIONS
 from ..FbiClient import FbiClient
 
 
@@ -31,6 +33,7 @@ def main():
         action="store_true",
         help="Verbosity setting.",
     )
+
     args = parser.parse_args()
 
     cs = args.cs
@@ -41,10 +44,13 @@ def main():
 
     client = FbiClient(cs, QUEUE_NAME)
     invocation_client = LocalInvocationClient()
+    iteration = 1
 
-    print("Connected to {}.".format())
+    print("Connected to {}.".format(client.control_client.account_name + " " + client.control_client.queue_name))
 
-    while True:
+    client.send_output_message(FbiQueueItem(content="Hello from {}".format(platform.node()), cwd=invocation_client.cwd))
+
+    while True and iteration <= MAX_ITERATIONS:
         if args.verbose:
             print("Iteration {}".format(iteration))
 
@@ -56,6 +62,7 @@ def main():
 
             output = invocation_client.run(control_msg)
             client.send_output_message(output)
+            print(output.content)
 
         time.sleep(1)
         iteration += 1

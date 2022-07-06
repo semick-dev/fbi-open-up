@@ -31,8 +31,9 @@ class FbiClient:
 
         if msg is not None:
             client.delete_message(msg)
+            return FbiQueueItem.load_from_json_string(msg.content)
 
-        return FbiQueueItem.load_from_json_string(msg.content)
+        return None
 
     def send_message(self, client: QueueClient, message: FbiQueueItem) -> QueueMessage:
         try:

@@ -5,6 +5,7 @@ import uuid
 import platform
 import pdb
 
+from colorama import Fore, Style
 from subprocess import run as process_run
 from typing import List
 from .FbiQueueItem import FbiQueueItem
@@ -27,7 +28,7 @@ class LocalInvocationClient:
             self.cwd = "/"
 
     def wait_for_input(self, output_message: FbiQueueItem) -> FbiQueueItem:
-        content = input("[remote connection] {}> ".format(output_message.cwd))
+        content = input(Fore.YELLOW + "[devops agent] {}> ".format(output_message.cwd) + Style.RESET_ALL)
 
         return FbiQueueItem(content, cwd=self.cwd)
 

@@ -29,7 +29,7 @@ class FbiQueueItem:
         if doc["cwd"]:
             cwd = doc["cwd"]
 
-        return cls(content=doc["content"], type=doc["type"], shell=doc["shell"], cwd=cwd)
+        return cls(content=doc["_content"], type=doc["type"], shell=doc["shell"], cwd=cwd)
 
     def decode_content(self, input_str: str):
         b64_encoded_bytes = input_str.encode("utf-8")

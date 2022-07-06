@@ -11,6 +11,7 @@ from fbi import FbiClient, LocalInvocationClient
 load_dotenv()
 
 COMMON_QUEUE_NAME = "test"
+self_path = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.abspath(os.path.join(os.path.abspath(__file__), "..", ".."))
 live_only = pytest.mark.skipif("not config.getoption('live_only')")
 windows_only = pytest.mark.skipif(platform.system().lower() != "windows", reason="Only runs on windows.")
@@ -18,6 +19,13 @@ windows_only = pytest.mark.skipif(platform.system().lower() != "windows", reason
 
 def pytest_addoption(parser):
     parser.addoption("--live_only", action="store_true", dest="live_only", default=False, help="Enable Live Tests")
+
+
+def load_test_data(file_name: str) -> str:
+    with open(os.path.join(self_path, "samples", file_name), "r", encoding="utf-8") as f:
+        data = f.read()
+
+    return data
 
 
 def get_queue_client(queue_name: str) -> FbiClient:

@@ -1,7 +1,7 @@
 # unique_queue_client and common_queue_client fixtures are available from conftest
 import pdb
 import pytest
-from conftest import live_only, local_client, windows_only
+from conftest import live_only, local_client, windows_only, load_test_data, root_dir
 from fbi import FbiQueueItem, LocalInvocationClient
 
 # on test signature add mocker
@@ -34,5 +34,10 @@ def test_valid_control_message_3(local_client: LocalInvocationClient):
     assert result is not None
 
     decoded_content = result.content
-    print(decoded_content)
     assert "dev_requirements.txt" in decoded_content
+
+
+def test_valid_output_message_1_no_input(local_client: LocalInvocationClient):
+    mock_output_item = FbiQueueItem(content=load_test_data("basic_git_output.txt"), cwd=root_dir)
+
+    result = local_client.output(mock_output_item, wait=False)
