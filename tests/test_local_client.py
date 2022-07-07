@@ -37,7 +37,19 @@ def test_valid_control_message_3(local_client: LocalInvocationClient):
     assert "dev_requirements.txt" in decoded_content
 
 
-def test_valid_output_message_1_no_input(local_client: LocalInvocationClient):
-    mock_output_item = FbiQueueItem(content=load_test_data("basic_git_output.txt"), cwd=root_dir)
+def test_valid_output_message_1_no_input(local_client: LocalInvocationClient, mocker):
+    test_data = load_test_data("basic_git_output.txt")
+    mock_output_item = FbiQueueItem(content=test_data, cwd=root_dir)
+
+    def mocked_output(output_message: FbiQueueItem) -> str:
+        return output_message.content
+
+    targeted_content = load_test_data("basic_git_output.txt")
+
+    mocker.patch(
+        'fbi.LocalInvocationClient.write_output',
+        side_effect=mocked_output
+    )
 
     result = local_client.output(mock_output_item, wait=False)
+    assert local_client.cwd == root_dir

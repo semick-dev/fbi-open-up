@@ -32,12 +32,15 @@ class LocalInvocationClient:
 
         return FbiQueueItem(content, cwd=self.cwd)
 
+    def write_output(message: FbiQueueItem) -> None:
+        print(output_message.content)
+    
+
     # prints an output message
     def output(self, output_message: FbiQueueItem, wait=True) -> FbiQueueItem:
         self.cwd = output_message.cwd
 
-        # todo dump the output
-        print(output_message.content)
+        self.write_output(output_message)
 
         if wait:
             return self.wait_for_input(output_message)
