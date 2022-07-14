@@ -12,7 +12,7 @@ from .FbiQueueItem import FbiQueueItem
 
 
 class LocalInvocationClient:
-    def __init__(self, start_directory: str = ""):
+    def __init__(self, start_directory: str = None):
         self.cwd = start_directory
 
         current_plat = platform.system()
@@ -32,8 +32,8 @@ class LocalInvocationClient:
 
         return FbiQueueItem(content, cwd=self.cwd)
 
-    def write_output(message: FbiQueueItem) -> None:
-        print(output_message.content)
+    def write_output(self, message: FbiQueueItem) -> None:
+        print(message.content)
     
 
     # prints an output message

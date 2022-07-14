@@ -1,6 +1,6 @@
 import json
 import base64
-
+import pdb
 
 class FbiQueueItem:
     def __init__(self, content: str, type: str = None, shell: str = None, cwd: str = None) -> None:
@@ -35,6 +35,12 @@ class FbiQueueItem:
         b64_encoded_bytes = input_str.encode("utf-8")
         original_bytes = base64.b64decode(b64_encoded_bytes)
         original_string = original_bytes.decode("utf-8")
+
+        # todo, why do I need to double decode? as far as I can tell I'm not double encoding
+        b64_encoded_bytes = original_string.encode("utf-8")
+        original_bytes = base64.b64decode(b64_encoded_bytes)
+        original_string = original_bytes.decode("utf-8")
+
         return original_string.encode("latin-1", "backslashreplace").decode("unicode-escape")
 
     def encode_content(self, input_str: str):

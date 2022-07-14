@@ -14,10 +14,11 @@ setup(
         "console_scripts": [
             "openup=fbi.openup:main",
             "fbi=fbi.fbi:main",
+            "fbi_reset=fbi:reset"
         ]
     },
     classifiers=[
-        "Development Status :: 1 - Planning",
+        "Development Status :: 3 - Alpha",
         "Programming Language :: Python :: 3.0",
         "Topic :: Utilities",
     ],

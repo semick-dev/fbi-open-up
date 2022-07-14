@@ -43,7 +43,7 @@ def main():
         cs = DEFAULT_CONNECTION_STRING
 
     client = FbiClient(cs, QUEUE_NAME)
-    invocation_client = LocalInvocationClient()
+    invocation_client = LocalInvocationClient(os.getcwd())
     iteration = 1
 
     print("Connected to {}.".format(client.control_client.account_name + " " + client.control_client.queue_name))
