@@ -19,7 +19,7 @@ def main():
         dest="cs",
         help="The blob storage connection string. If not provided, will fall back to FBI_CONNECTION_STRING.",
     )
-    
+
     parser.add_argument(
         "-v" "--verbose",
         dest="verbose",
@@ -41,7 +41,7 @@ def main():
     invocation_client = LocalInvocationClient()
     iteration = 1
 
-    print("Connected to {}.".format(client.output_client.account_name + " " + client.control_client.queue_name))
+    print("Connected to {}.".format(client.output_client.account_name + " -> " + client.control_client.queue_name))
 
     while True and iteration <= MAX_ITERATIONS:
         if args.verbose:
@@ -50,6 +50,10 @@ def main():
         output_msg = client.get_output_message()
 
         if output_msg is not None:
+            # special handling for types
+            if output_msg.type == "startup":
+                invocation_client.remote_agent_name = output_msg.additional_data
+
             control_msg = invocation_client.output(output_msg)
 
             if control_msg is not None:

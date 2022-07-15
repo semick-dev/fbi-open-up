@@ -15,6 +15,8 @@ class LocalInvocationClient:
     def __init__(self, start_directory: str = None):
         self.cwd = start_directory
 
+        self.remote_agent_name = "devops agent"
+
         current_plat = platform.system()
         if current_plat == "Windows":
             self.invocation_command = ["pwsh", "-c"]
@@ -28,13 +30,14 @@ class LocalInvocationClient:
             self.cwd = "/"
 
     def wait_for_input(self, output_message: FbiQueueItem) -> FbiQueueItem:
-        content = input(Fore.YELLOW + "[devops agent] {}> ".format(output_message.cwd) + Style.RESET_ALL)
+        content = input(
+            Fore.GREEN + "[{}]".format(self.remote_agent_name) + Style.RESET_ALL + " {}>".format(output_message.cwd)
+        )
 
         return FbiQueueItem(content, cwd=self.cwd)
 
     def write_output(self, message: FbiQueueItem) -> None:
         print(message.content)
-    
 
     # prints an output message
     def output(self, output_message: FbiQueueItem, wait=True) -> FbiQueueItem:

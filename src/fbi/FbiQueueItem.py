@@ -2,8 +2,11 @@ import json
 import base64
 import pdb
 
+
 class FbiQueueItem:
-    def __init__(self, content: str, type: str = None, shell: str = None, cwd: str = None) -> None:
+    def __init__(
+        self, content: str, type: str = None, shell: str = None, cwd: str = None, additional_data: str = None
+    ) -> None:
         # content is encoded for easy upload / json-ing later
         self._content = self.encode_content(content)
         # type of message. "control" or "output"
@@ -13,9 +16,14 @@ class FbiQueueItem:
         # only populated in output message, what is the current working directory?
         self.cwd = cwd
 
+        self.additional_data = additional_data
+
     @property
     def content(self) -> str:
-        return self.decode_content(self._content)
+        if self._content:
+            return self.decode_content(self._content)
+        else:
+            return self._content
 
     @content.setter
     def content(self, setting: str) -> None:
@@ -25,11 +33,13 @@ class FbiQueueItem:
     def load_from_json_string(cls, json_content: str):
         doc = json.loads(json_content)
 
-        cwd = None
-        if doc["cwd"]:
-            cwd = doc["cwd"]
-
-        return cls(content=doc["_content"], type=doc["type"], shell=doc["shell"], cwd=cwd)
+        return cls(
+            content=doc["_content"],
+            type=doc["type"],
+            shell=doc["shell"],
+            cwd=doc["cwd"],
+            additional_data=doc["additional_data"],
+        )
 
     def decode_content(self, input_str: str):
         b64_encoded_bytes = input_str.encode("utf-8")

@@ -46,10 +46,7 @@ def test_valid_output_message_1_no_input(local_client: LocalInvocationClient, mo
 
     targeted_content = load_test_data("basic_git_output.txt")
 
-    mocker.patch(
-        'fbi.LocalInvocationClient.write_output',
-        side_effect=mocked_output
-    )
+    mocker.patch("fbi.LocalInvocationClient.write_output", side_effect=mocked_output)
 
     result = local_client.output(mock_output_item, wait=False)
     assert local_client.cwd == root_dir

@@ -46,9 +46,16 @@ def main():
     invocation_client = LocalInvocationClient(os.getcwd())
     iteration = 1
 
-    print("Connected to {}.".format(client.control_client.account_name + " " + client.control_client.queue_name))
+    print("Connected to {}.".format(client.control_client.account_name + " -> " + client.control_client.queue_name))
 
-    client.send_output_message(FbiQueueItem(content="Hello from {}".format(platform.node()), cwd=invocation_client.cwd))
+    client.send_output_message(
+        FbiQueueItem(
+            content="Hello from {}".format(platform.node()),
+            additional_data=platform.node(),
+            type="startup",
+            cwd=invocation_client.cwd
+        )
+    )
 
     while True and iteration <= MAX_ITERATIONS:
         if args.verbose:
