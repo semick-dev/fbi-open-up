@@ -33,25 +33,24 @@ class FbiQueueItem:
     def load_from_json_string(cls, json_content: str):
         doc = json.loads(json_content)
 
-        return cls(
-            content=doc["_content"],
+        result = cls(
+            content="",
             type=doc["type"],
             shell=doc["shell"],
             cwd=doc["cwd"],
             additional_data=doc["additional_data"],
         )
 
+        result._content = doc["_content"]
+
+        return result
+
     def decode_content(self, input_str: str):
         b64_encoded_bytes = input_str.encode("utf-8")
         original_bytes = base64.b64decode(b64_encoded_bytes)
         original_string = original_bytes.decode("utf-8")
 
-        # todo, why do I need to double decode? as far as I can tell I'm not double encoding
-        b64_encoded_bytes = original_string.encode("utf-8")
-        original_bytes = base64.b64decode(b64_encoded_bytes)
-        original_string = original_bytes.decode("utf-8")
-
-        return original_string.encode("latin-1", "backslashreplace").decode("unicode-escape")
+        return original_string.encode("latin-1", "backslashreplace").decode("utf-8")
 
     def encode_content(self, input_str: str):
         input_str_bytes = input_str.encode("utf-8")

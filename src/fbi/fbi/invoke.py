@@ -53,7 +53,7 @@ def main():
             content="Hello from {}".format(platform.node()),
             additional_data=platform.node(),
             type="startup",
-            cwd=invocation_client.cwd
+            cwd=invocation_client.cwd,
         )
     )
 

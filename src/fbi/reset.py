@@ -41,5 +41,4 @@ def reset():
             + client.output_client.queue_name
         )
     )
-    client.delete_queues()
-    client.create_queues()
+    client.clear_queues()

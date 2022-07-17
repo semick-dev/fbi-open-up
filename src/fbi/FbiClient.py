@@ -70,10 +70,25 @@ class FbiClient:
                 # todo: specific logic here
                 pass
 
-    def delete_queues(self, include_control=True, include_output=True):
+    def clear_queues(self, include_control: bool = True, include_output: bool = True):
         if include_control:
             try:
-                self.control_client.delete_queue
+                self.control_client.clear_messages()
+            except Exception as e:
+                # todo: specific logic here
+                pass
+
+        if include_output:
+            try:
+                self.output_client.clear_messages()
+            except Exception as e:
+                # todo: specific logic here
+                pass
+
+    def delete_queues(self, include_control: bool = True, include_output: bool = True):
+        if include_control:
+            try:
+                self.control_client.delete_queue()
             except Exception as e:
                 # todo: specific logic here
                 pass
