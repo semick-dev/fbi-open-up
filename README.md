@@ -35,7 +35,10 @@ Select your shell
 ...
 ```
 
-Here is an `openup` session in practice!
+Here is an `openup` session in practice! (still local)
+
+![it_actually_works](https://user-images.githubusercontent.com/479566/179384275-e1c3fc5b-6c40-423e-bdf9-f34020eb84de.gif)
+
 
 
 
