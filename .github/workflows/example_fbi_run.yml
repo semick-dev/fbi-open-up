@@ -25,7 +25,7 @@ jobs:
           fbi
         shell: bash
         env:
-          # sorry folks I know this from my day job, this is an azure storage connection string
           FBI_QUEUE_NAME: agent-integration-1
+          # sorry folks I know this from my day job, this is an azure storage connection string
           FBI_QUEUE_CS: ${{ secrets.STORAGE_CONNECTION_STRING }}
 
