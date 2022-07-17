@@ -6,18 +6,17 @@ Have you ever encountered a finicky CI problem where you feel like yelling "I JU
 
 The project is quite simple, but should meet MOST of your debugging needs. It uses a storage queue on an account YOU control to pass messages back and forth from the agent to a place where your local CLI can grab them.
 
-todo, if I ever get around to it:
 
-- shell syntax highlighting on response
-
-_devops/actions yaml_
+`.gihtub/workflows/<your-problem-action>.yml`
 ```yml
 - bash: |
-    <set python version and install>
-    fbi "<connection string>"
-  displayName: "Run the agent"
-  timeOutInMinutes: 60
+    pip install fbi-open-up
+    fbi -c "<connection string>"
+  displayName: "A step inserted into your problem build"
+  timeOutInMinutes: 3
 ```
+
+
 
 _On your machine_
 
