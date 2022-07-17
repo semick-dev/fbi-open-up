@@ -2,3 +2,4 @@ import os
 
 QUEUE_NAME = os.getenv("FBI_QUEUE_NAME", "fbi")
 DEFAULT_CONNECTION_STRING = os.getenv("FBI_QUEUE_CS", None)
+MAX_ITERATIONS = os.getenv("FBI_MAX_ITERATIONS", 1800)

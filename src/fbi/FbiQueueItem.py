@@ -1,11 +1,14 @@
 import json
 import base64
+import pdb
 
 
 class FbiQueueItem:
-    def __init__(self, content: str, type: str, shell: str, cwd: str = None) -> None:
-        # b64 encoded raw shell output from agent
-        self.content = content
+    def __init__(
+        self, content: str, type: str = None, shell: str = None, cwd: str = None, additional_data: str = None
+    ) -> None:
+        # content is encoded for easy upload / json-ing later
+        self._content = self.encode_content(content)
         # type of message. "control" or "output"
         self.type = type
         # what shell was the command invoked on?
@@ -13,21 +16,41 @@ class FbiQueueItem:
         # only populated in output message, what is the current working directory?
         self.cwd = cwd
 
+        self.additional_data = additional_data
+
+    @property
+    def content(self) -> str:
+        if self._content:
+            return self.decode_content(self._content)
+        else:
+            return self._content
+
+    @content.setter
+    def content(self, setting: str) -> None:
+        self._content = self.encode_content(setting)
+
     @classmethod
     def load_from_json_string(cls, json_content: str):
         doc = json.loads(json_content)
 
-        cwd = None
-        if doc["cwd"]:
-            cwd = doc["cwd"]
+        result = cls(
+            content="",
+            type=doc["type"],
+            shell=doc["shell"],
+            cwd=doc["cwd"],
+            additional_data=doc["additional_data"],
+        )
 
-        return cls(content=doc["content"], type=doc["type"], shell=doc["shell"], cwd=cwd)
+        result._content = doc["_content"]
+
+        return result
 
     def decode_content(self, input_str: str):
         b64_encoded_bytes = input_str.encode("utf-8")
         original_bytes = base64.b64decode(b64_encoded_bytes)
         original_string = original_bytes.decode("utf-8")
-        return original_string
+
+        return original_string.encode("latin-1", "backslashreplace").decode("utf-8")
 
     def encode_content(self, input_str: str):
         input_str_bytes = input_str.encode("utf-8")

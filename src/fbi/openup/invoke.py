@@ -5,7 +5,7 @@ import time
 
 from ..FbiClient import FbiClient
 from ..LocalInvocationClient import LocalInvocationClient
-from ..config import QUEUE_NAME, DEFAULT_CONNECTION_STRING
+from ..config import QUEUE_NAME, DEFAULT_CONNECTION_STRING, MAX_ITERATIONS
 
 
 def main():
@@ -19,6 +19,14 @@ def main():
         dest="cs",
         help="The blob storage connection string. If not provided, will fall back to FBI_CONNECTION_STRING.",
     )
+
+    parser.add_argument(
+        "-v" "--verbose",
+        dest="verbose",
+        action="store_true",
+        help="Verbosity setting.",
+    )
+
     args = parser.parse_args()
 
     cs = args.cs
@@ -31,19 +39,25 @@ def main():
 
     client = FbiClient(cs, QUEUE_NAME)
     invocation_client = LocalInvocationClient()
+    iteration = 1
 
-    print("Connected to {}.".format())
+    print("Connected to {}.".format(client.output_client.account_name + " -> " + client.control_client.queue_name))
 
-    while True:
+    while True and iteration <= MAX_ITERATIONS:
         if args.verbose:
             print("Iteration {}".format(iteration))
 
         output_msg = client.get_output_message()
 
         if output_msg is not None:
-            if args.verbose:
-                print(output_msg)
-            
-            invocation_client.output(output_msg)
+            # special handling for types
+            if output_msg.type == "startup":
+                invocation_client.remote_agent_name = output_msg.additional_data
 
+            control_msg = invocation_client.output(output_msg)
+
+            if control_msg is not None:
+                client.send_control_message(control_msg)
+
+        time.sleep(1)
         iteration += 1

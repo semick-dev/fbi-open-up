@@ -10,14 +10,9 @@ setup(
     package_dir={"": "src"},
     packages=find_packages(where="src", exclude=["tests"]),
     install_requires=["setuptools>=45.0", "requests", "azure-storage-queue>=12.3.0", "colorama"],
-    entry_points={
-        "console_scripts": [
-            "openup=fbi.openup:main",
-            "fbi=fbi.fbi:main",
-        ]
-    },
+    entry_points={"console_scripts": ["openup=fbi.openup:main", "fbi=fbi.fbi:main", "fbi_reset=fbi:reset"]},
     classifiers=[
-        "Development Status :: 1 - Planning",
+        "Development Status :: 3 - Alpha",
         "Programming Language :: Python :: 3.0",
         "Topic :: Utilities",
     ],

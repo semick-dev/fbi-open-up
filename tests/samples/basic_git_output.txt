@@ -1,0 +1,16 @@
+git status
+On branch work-through-core
+Your branch is up to date with 'origin/work-through-core'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   src/fbi/FbiQueueItem.py
+        modified:   src/fbi/LocalInvocationClient.py
+        modified:   src/fbi/fbi/invoke.py
+        modified:   src/fbi/openup/invoke.py
+        modified:   tests/conftest.py
+        modified:   tests/test_local_client.py
+        modified:   tests/test_queue_interactions.py
+
+no changes added to commit (use "git add" and/or "git commit -a")

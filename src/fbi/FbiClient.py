@@ -1,6 +1,7 @@
-from enum import auto
 import os
 import pdb
+import platform
+
 from ctypes import ArgumentError
 from typing import List
 from azure.storage.queue import QueueClient, QueueMessage
@@ -30,8 +31,9 @@ class FbiClient:
 
         if msg is not None:
             client.delete_message(msg)
+            return FbiQueueItem.load_from_json_string(msg.content)
 
-        return FbiQueueItem.load_from_json_string(msg.content)
+        return None
 
     def send_message(self, client: QueueClient, message: FbiQueueItem) -> QueueMessage:
         try:
@@ -68,17 +70,32 @@ class FbiClient:
                 # todo: specific logic here
                 pass
 
-    def delete_queues(self, include_control=True, include_output=True):
+    def clear_queues(self, include_control: bool = True, include_output: bool = True):
         if include_control:
             try:
-                self.control_client.delete_queue
+                self.control_client.clear_messages()
             except Exception as e:
                 # todo: specific logic here
                 pass
 
         if include_output:
             try:
-                self.output_client.delete_queue
+                self.output_client.clear_messages()
+            except Exception as e:
+                # todo: specific logic here
+                pass
+
+    def delete_queues(self, include_control: bool = True, include_output: bool = True):
+        if include_control:
+            try:
+                self.control_client.delete_queue()
+            except Exception as e:
+                # todo: specific logic here
+                pass
+
+        if include_output:
+            try:
+                self.output_client.delete_queue()
             except Exception as e:
                 # todo: specific logic here
                 pass
