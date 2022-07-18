@@ -15,7 +15,6 @@ Depending on the platform that the `fbi` agent is run on, it will either leverag
     pip install fbi-open-up
     fbi -c "<connection string>"
   displayName: "A step inserted into your problem build"
-  timeOutInMinutes: 3
 ```
 
 _On your machine._
@@ -27,7 +26,6 @@ _On your machine._
 _In a github action._
 
 ```yml
-
 steps:
   # <your normal job steps having issues here>
   # fbi-open-up takes a dep on python > 3. it does not update your selected python version though
@@ -35,5 +33,5 @@ steps:
     with:
       fbi-queue-cs:
       fbi-queue-name: 'agent-actions' # this is not required, but will default to `agent-interactions
-      fbi-max-iterations: '180'
+      fbi-max-iterations: '180' # time in seconds this thing will be waiting for
 ```
