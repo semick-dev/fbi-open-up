@@ -13,7 +13,7 @@ Interacting with a github actions agent:
 ![working_example_ubuntu](https://user-images.githubusercontent.com/479566/179447898-db6e0fb8-6b4d-4173-b187-75d96361adac.gif)
 
 
-## Example Usage
+## Example usage
 
 _Call the agent from your devops pipeline..._
 ```yml
