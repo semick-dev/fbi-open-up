@@ -7,24 +7,11 @@ jobs:
   # This workflow contains a single job called "build"
   run_fbi:
     # The type of runner that the job will run on
-    runs-on: ubuntu-20.04
+    runs-on: windows-2022
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      - name: Install fbi/openup
-        run: |
-          pip install .
-        shell: bash
-
-      - name: Invoke FBI on Agent
-        run: |
-          fbi
-        shell: bash
-        env:
-          FBI_QUEUE_NAME: agent-integration-1
-          # sorry folks I know this from my day job, this is an azure storage connection string
-          FBI_QUEUE_CS: ${{ secrets.STORAGE_CONNECTION_STRING }}
-
+      - uses: semick-dev/fbi-open-up@
+        with:
+          fbi-queue-cs: ${{ secrets.STORAGE_CONNECTION_STRING }}
