@@ -1,31 +1,12 @@
-name: Run Tests
+name: Example FBI Run
 
 on:
   workflow_dispatch:
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-20.04
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+  run_fbi:
+    # working on ubuntu still
+    runs-on: windows-2022
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      - name: Install fbi/openup
-        run: |
-          pip install .
-          pip install -r dev_requirements.txt
-        shell: bash
-
-      - name: Invoke FBI on Agent
-        run: |
-          fbi
-        shell: bash
-        env:
-          # sorry folks I know this from my day job, this is an azure storage connection string
-          FBI_QUEUE_NAME: ${{ secrets.STORAGE_CONNECTION_STRING }}
-          FBI_QUEUE_CS: agent-integration-1
-
+      - uses: semick-dev/fbi-open-up@action/v1
+        with:
+          fbi-queue-cs: ${{ secrets.STORAGE_CONNECTION_STRING }}

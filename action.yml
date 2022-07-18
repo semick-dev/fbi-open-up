@@ -1,0 +1,31 @@
+name: 'Run FBI'
+description: 'Starts an instance of the `fbi` python package.'
+inputs:
+  fbi-queue-cs:
+    description: 'Connection string to storage account'
+    required: true
+  fbi-queue-name:
+    description: 'Queue name prefix.'
+    required: false
+    default: 'agent-actions'
+  fbi-max-iterations:
+    description: 'How many seconds will this thing spin interacting with remote requests?'
+    required: false
+    default: 300
+runs:
+  using: "composite"
+  steps:
+    - name: Install FBI
+      run: |
+        pip install $GITHUB_ACTION_PATH
+      shell: bash
+
+    - name: Invoke FBI on agent
+      run: |
+        fbi
+      shell: bash
+      env:
+        FBI_QUEUE_NAME: ${{ inputs.fbi-queue-name }}
+        FBI_QUEUE_CS: ${{ inputs.fbi-queue-cs }}
+        FBI_MAX_ITERATIONS: ${{ inputs.fbi-max-iterations }}
+
