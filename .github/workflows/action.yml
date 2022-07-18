@@ -14,7 +14,6 @@ inputs:
     default: 300
 runs:
   using: "composite"
-
   steps:
     - name: Install FBI
       run: |
