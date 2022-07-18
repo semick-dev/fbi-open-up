@@ -15,7 +15,8 @@ Interacting with a github actions agent:
 
 ## Example Usage
 
-`.github/workflows/<your-problem-action>.yml`
+_Call the agent from your devops pipeline..._
+`.azure-pipelines/job1.yml`
 ```yml
 - bash: |
     pip install fbi-open-up
@@ -24,30 +25,40 @@ Interacting with a github actions agent:
 # you can optionally skip the arguments above and used the connection strings defined below 
 ```
 
-_On your machine._
-```bash
-/>openup "<connection string>"
-```
-
-_In a github action._
+_...or in a github action...._
 ```yml
 steps:
   # <your normal job steps having issues here>
   # fbi-open-up takes a dep on python > 3. it does not update your selected python version though
   - uses: semick-dev/fbi-open-up
     with:
-      fbi-queue-cs:
+      # this is an azure storage connection string, sorry folks I know it from my dayjob.
+      fbi-queue-cs: ${{ secrets.STORAGE_CONNECTION_STRING }}
       fbi-queue-name: 'agent-actions' # this is not required, but will default to `agent-interactions
       fbi-max-iterations: '180' # time in seconds this thing will be waiting for
 ```
 
+_...then control from your machine._
+```bash
+/> openup -c "<connection string>"
+```
+
 ## Local installation and usage
 
-Install
+**Install**
 
 ```bash
 pip install git+https://github.com/semick-dev/fbi-open-up@main
 ```
+
+> This package is not yet ready for publication on pypi.
+
+There are **two** executables within this package.
+
+| Command        | Description                                                                                                                                |
+|----------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
+| `fbi`       | The "one doing the work". This is what you call on your action or devops agent.   |
+| `openup`       | The "controller" of the two. It listens to responses from the `fbi` agent and sends commands back from user input.|
 
 `fbi -h`
 ```text
