@@ -16,7 +16,6 @@ Interacting with a github actions agent:
 ## Example Usage
 
 _Call the agent from your devops pipeline..._
-`.azure-pipelines/job1.yml`
 ```yml
 - bash: |
     pip install fbi-open-up
@@ -34,13 +33,13 @@ steps:
     with:
       # this is an azure storage connection string, sorry folks I know it from my dayjob.
       fbi-queue-cs: ${{ secrets.STORAGE_CONNECTION_STRING }}
-      fbi-queue-name: 'agent-actions' # this is not required, but will default to `agent-interactions
+      fbi-queue-name: 'agent-actions' # this is not required, but will default to `agent-actions`
       fbi-max-iterations: '180' # time in seconds this thing will be waiting for
 ```
 
 _...then control from your machine._
 ```bash
-/> openup -c "<connection string>"
+/> openup -c "<same connection string as agent used>"
 ```
 
 ## Local installation and usage
@@ -93,7 +92,7 @@ Both `fbi` and `openup` honor the following variables.
 | Variable Name        | Description                                                                                                                                |
 |----------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
 | `FBI_QUEUE_CS`       | Connection string used to communicate with the azure-storage-account. If provided via command line argument, this value will be ignored.   |
-| `FBI_QUEUE_NAME`     | The prefix of the queues used for this session. A value of `agent-interactions` becomes `agent-interactions-control` and `agent-interactions-output` during usage. |
+| `FBI_QUEUE_NAME`     | The prefix of the queues used for this session. A value of `agent-actions` becomes `agent-actions-control` and `agent-actions-output` during usage. |
 | `FBI_MAX_ITERATIONS` | The number of `sleep` cycles the app will run before exiting. Defaults to 3 minutes to save on CI time.                                    |
 
 ## Important gotcha about running the agent
