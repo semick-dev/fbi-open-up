@@ -13,9 +13,9 @@ Interacting with a github actions agent:
 ![working_example_ubuntu](https://user-images.githubusercontent.com/479566/179447898-db6e0fb8-6b4d-4173-b187-75d96361adac.gif)
 
 
-## Example Usage
+## Example usage
 
-`.github/workflows/<your-problem-action>.yml`
+_Call the agent from your devops pipeline..._
 ```yml
 - bash: |
     pip install fbi-open-up
@@ -24,30 +24,40 @@ Interacting with a github actions agent:
 # you can optionally skip the arguments above and used the connection strings defined below 
 ```
 
-_On your machine._
-```bash
-/>openup "<connection string>"
-```
-
-_In a github action._
+_...or in a github action...._
 ```yml
 steps:
   # <your normal job steps having issues here>
   # fbi-open-up takes a dep on python > 3. it does not update your selected python version though
-  - uses: semick-dev/fbi-open-up
+  - uses: semick-dev/fbi-open-up@action/v1
     with:
-      fbi-queue-cs:
-      fbi-queue-name: 'agent-actions' # this is not required, but will default to `agent-interactions
+      # this is an azure storage connection string, sorry folks I know it from my dayjob.
+      fbi-queue-cs: ${{ secrets.STORAGE_CONNECTION_STRING }}
+      fbi-queue-name: 'agent-actions' # this is not required, but will default to `agent-actions`
       fbi-max-iterations: '180' # time in seconds this thing will be waiting for
+```
+
+_...then control from your machine._
+```bash
+/> openup -c "<same connection string as agent used>"
 ```
 
 ## Local installation and usage
 
-Install
+**Install**
 
 ```bash
 pip install git+https://github.com/semick-dev/fbi-open-up@main
 ```
+
+> This package is not yet ready for publication on pypi.
+
+There are **two** executables within this package.
+
+| Command        | Description                                                                                                                                |
+|----------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
+| `fbi`       | The "one doing the work". This is what you call on your action or devops agent.   |
+| `openup`       | The "controller" of the two. It listens to responses from the `fbi` agent and sends commands back from user input.|
 
 `fbi -h`
 ```text
@@ -82,7 +92,7 @@ Both `fbi` and `openup` honor the following variables.
 | Variable Name        | Description                                                                                                                                |
 |----------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
 | `FBI_QUEUE_CS`       | Connection string used to communicate with the azure-storage-account. If provided via command line argument, this value will be ignored.   |
-| `FBI_QUEUE_NAME`     | The prefix of the queues used for this session. A value of `agent-interactions` becomes `agent-interactions-control` and `agent-interactions-output` during usage. |
+| `FBI_QUEUE_NAME`     | The prefix of the queues used for this session. A value of `agent-actions` becomes `agent-actions-control` and `agent-actions-output` during usage. |
 | `FBI_MAX_ITERATIONS` | The number of `sleep` cycles the app will run before exiting. Defaults to 3 minutes to save on CI time.                                    |
 
 ## Important gotcha about running the agent
