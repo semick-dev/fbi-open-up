@@ -1,5 +1,8 @@
 name: 'Run FBI'
 description: 'Starts an instance of the `fbi` python package.'
+branding:
+  icon: 'activity'
+  color: 'black'
 inputs:
   fbi-queue-cs:
     description: 'Connection string to storage account'
