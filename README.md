@@ -29,7 +29,7 @@ _...or in a github action...._
 steps:
   # <your normal job steps having issues here>
   # fbi-open-up takes a dep on python > 3. it does not update your selected python version though
-  - uses: semick-dev/fbi-open-up
+  - uses: semick-dev/fbi-open-up@action/v1
     with:
       # this is an azure storage connection string, sorry folks I know it from my dayjob.
       fbi-queue-cs: ${{ secrets.STORAGE_CONNECTION_STRING }}
