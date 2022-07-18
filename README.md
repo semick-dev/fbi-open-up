@@ -2,12 +2,6 @@
 
 **tl;dr** "Debug" finicky CI failures
 
-- [fbi/open-up](#fbiopen-up)
-  - [Example Usage](#example-usage)
-  - [Command Details](#command-details)
-  - [Environment Variables](#environment-variables)
-  - [Important gotcha about running the agent](#important-gotcha-about-running-the-agent)
-
 Have you ever encountered a finicky CI problem where you feel like yelling "I JUST WANT A TERMINAL WITH THE AGENT" at the screen? Well, this little hacky pile of garbage will allow you to bust into your agent jobs and _actually do that_. 
 
 The project is quite simple, but should meet MOST of your debugging needs. It uses an Azure Storage Queue on an account YOU control to pass messages back and forth from the agent to a place where your local CLI can grab them.
