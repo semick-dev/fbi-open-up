@@ -2,16 +2,11 @@ name: Example FBI Run
 
 on:
   workflow_dispatch:
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   run_fbi:
-    # The type of runner that the job will run on
+    # working on ubuntu still
     runs-on: windows-2022
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: semick-dev/fbi-open-up@action/v1
         with:
           fbi-queue-cs: ${{ secrets.STORAGE_CONNECTION_STRING }}

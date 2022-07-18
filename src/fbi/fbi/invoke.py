@@ -47,8 +47,6 @@ def main():
     iteration = 1
 
     print("Connected to {}.".format(client.control_client.account_name + " -> " + client.control_client.queue_name))
-    print(cs[0:10])
-    print(cs[10:])
 
     client.send_output_message(
         FbiQueueItem(
