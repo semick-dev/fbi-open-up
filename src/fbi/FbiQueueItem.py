@@ -18,6 +18,17 @@ class FbiQueueItem:
 
         self.additional_data = additional_data
 
+    def __str__(self) -> str:
+        return """FbiQueueItem:
+    content: {}
+    type: {}
+    shell: {}
+    cwd: {}
+    additional_data: {}
+""".format(
+            self.content, self.type, self.shell, self.cwd, self.additional_data
+        )
+
     @property
     def content(self) -> str:
         if self._content:

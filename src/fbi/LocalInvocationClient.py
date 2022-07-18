@@ -4,6 +4,7 @@ import os
 import uuid
 import platform
 import pdb
+import shlex
 
 from colorama import Fore, Style
 from subprocess import run as process_run
@@ -57,13 +58,13 @@ class LocalInvocationClient:
         if control_message.content.lower().startswith("cd"):
             target = control_message.content[2:].lstrip()
             # cd <relative path>
-            # we just ignore the first few characters and let change directory figure out what we mean. 
+            # we just ignore the first few characters and let change directory figure out what we mean.
             # otherwise we would do ltrim.
             try:
                 os.chdir(target)
             except Exception as e:
                 pdb.set_trace()
-                raise Exception("Unable to change directory to \"{}\"".format(target))
+                raise Exception('Unable to change directory to "{}"'.format(target))
 
             self.cwd = os.getcwd()
 
@@ -96,18 +97,23 @@ class LocalInvocationClient:
     # takes a control_message, does the needful, and returns an output message with the results
     def run(self, control_message: FbiQueueItem) -> FbiQueueItem:
         output_msg = FbiQueueItem(content="", type="output", shell=control_message.shell, cwd=self.cwd)
-        cleanup=False
+        cleanup = False
         try:
             command, command_error = self.get_command(control_message)
 
             if command is not None:
-                cleanup=True
+                cleanup = True
                 temp_file = self.get_temp_file()
                 with open(temp_file, "w", encoding="utf-8") as f:
+                    invocation = []
+
+                    if platform.system() == "Windows":
+                        invocation = self.invocation_command + [command]
+                    else:
+                        invocation = self.invocation_command + ['"{}"'.format(shlex.quote(command))]
                     process_run(
-                        self.invocation_command + [command],
+                        invocation,
                         cwd=self.cwd,
-                        shell=True,
                         stdout=f,
                         stderr=subprocess.STDOUT,
                     )
