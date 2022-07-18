@@ -1,2 +1,3 @@
 FBI_QUEUE_NAME=agent-interactions-1
 FBI_QUEUE_CS=<blob storage connection string>
+FBI_MAX_ITERATIONS=<a number representing number of sleeps>
