@@ -17,7 +17,6 @@ jobs:
       - name: Install fbi/openup
         run: |
           pip install .
-          pip install -r dev_requirements.txt
         shell: bash
 
       - name: Invoke FBI on Agent
