@@ -6,6 +6,6 @@ jobs:
   run_fbi:
     runs-on: ubuntu-20.04
     steps:
-      - uses: semick-dev/fbi-open-up@action/v1
+      - uses: semick-dev/fbi-open-up@action/v2
         with:
           fbi-queue-cs: ${{ secrets.STORAGE_CONNECTION_STRING }}
