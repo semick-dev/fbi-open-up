@@ -27,5 +27,5 @@ runs:
       env:
         FBI_QUEUE_NAME: ${{ inputs.fbi-queue-name }}
         FBI_QUEUE_CS: ${{ inputs.fbi-queue-cs }}
-        FBI_MAX_ITERATIONS: ${{ inputs.fbi-queue-name }}
+        FBI_MAX_ITERATIONS: ${{ inputs.fbi-max-iterations }}
 
