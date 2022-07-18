@@ -10,7 +10,7 @@ The project is quite simple, but should meet MOST of your debugging needs. It us
 - On mac/linux, commands will be invoked via `bash`.
 
 Interacting with a github actions agent:
-
+![working_example_ubuntu](https://user-images.githubusercontent.com/479566/179447898-db6e0fb8-6b4d-4173-b187-75d96361adac.gif)
 
 
 ## Example Usage
@@ -46,7 +46,7 @@ steps:
 Install
 
 ```bash
-pip install fbi-open-up
+pip install git+https://github.com/semick-dev/fbi-open-up@main
 ```
 
 `fbi -h`
