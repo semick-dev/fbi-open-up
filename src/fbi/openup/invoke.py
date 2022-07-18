@@ -50,6 +50,9 @@ def main():
         output_msg = client.get_output_message()
 
         if output_msg is not None:
+            if args.verbose:
+                print(output_msg)
+
             # special handling for types
             if output_msg.type == "startup":
                 invocation_client.remote_agent_name = output_msg.additional_data
