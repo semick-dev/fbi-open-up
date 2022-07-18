@@ -9,6 +9,10 @@ The project is quite simple, but should meet MOST of your debugging needs. It us
 - On a windows agent, commands are invoked via `pwsh`.
 - On mac/linux, commands will be invoked via `bash`.
 
+Interacting with a github actions agent:
+
+
+
 ## Example Usage
 
 `.github/workflows/<your-problem-action>.yml`
@@ -37,7 +41,7 @@ steps:
       fbi-max-iterations: '180' # time in seconds this thing will be waiting for
 ```
 
-## Command Details
+## Local installation and usage
 
 Install
 
@@ -46,7 +50,6 @@ pip install fbi-open-up
 ```
 
 `fbi -h`
-
 ```text
 usage: fbi [-h] [-c CS] [-v--verbose]
 
@@ -60,7 +63,6 @@ optional arguments:
 ```
 
 `openup -h`
-
 ```text
 usage: openup [-h] [-c CS] [-v--verbose]
 
@@ -73,14 +75,14 @@ optional arguments:
   -v--verbose           Verbosity setting.
 ```
 
-## Environment Variables
+## Environment variables
 
 Both `fbi` and `openup` honor the following variables.
 
 | Variable Name        | Description                                                                                                                                |
 |----------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
 | `FBI_QUEUE_CS`       | Connection string used to communicate with the azure-storage-account. If provided via command line argument, this value will be ignored.   |
-| `FBI_QUEUE_NAME`     | The prefix of the queues used for this session. `agent-interactions` becomes `agent-interactions-control` and `agent-interactions-output`. |
+| `FBI_QUEUE_NAME`     | The prefix of the queues used for this session. A value of `agent-interactions` becomes `agent-interactions-control` and `agent-interactions-output` during usage. |
 | `FBI_MAX_ITERATIONS` | The number of `sleep` cycles the app will run before exiting. Defaults to 3 minutes to save on CI time.                                    |
 
 ## Important gotcha about running the agent
